@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import './App.css';
 
 // PUBLIC_INTERFACE
@@ -31,10 +31,6 @@ function HomePage() {
     </div>
   );
 }
-
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
-import './App.css';
 
 /**
  * PUBLIC_INTERFACE
@@ -363,10 +359,7 @@ function AboutPage() {
   );
 }
 
-/*
- * PUBLIC_INTERFACE
- * App handles main state (userProfile) and routing
- */
+// PUBLIC_INTERFACE
 function App() {
   const [userProfile, setUserProfile] = useState({
     name: '',
