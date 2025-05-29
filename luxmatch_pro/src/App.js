@@ -32,11 +32,14 @@ function HomePage() {
   );
 }
 
-// PUBLIC_INTERFACE
+/**
+ * PUBLIC_INTERFACE
+ * ProfilePage: User profile entry page for name, skills, career goals.
+ * Handles input and submits to main app state.
+ */
 function ProfilePage({ userProfile, onProfileSubmit }) {
-  // Always use string for skills input value
+  // State for each field, with default to passed userProfile prop values
   const [name, setName] = useState(userProfile.name || '');
-  // If userProfile.skills is an array, show as CSV. If not, fallback to string.
   const [skills, setSkills] = useState(
     Array.isArray(userProfile.skills)
       ? userProfile.skills.join(', ')
@@ -52,11 +55,11 @@ function ProfilePage({ userProfile, onProfileSubmit }) {
       return;
     }
     setError('');
-    // Parse skills input to array, trim each
-    const parsedSkills = skills.split(',').map(s => s.trim()).filter(Boolean);
+    // Parse skills as trimmed array, filter empty
+    const parsedSkills = skills.split(',')
+      .map(s => s.trim())
+      .filter(Boolean);
     onProfileSubmit({ name, skills: parsedSkills, goals });
-    // Optionally reset the form here if desired
-    // setName(""); setSkills(""); setGoals("");
   }
 
   return (
@@ -105,39 +108,39 @@ function ProfilePage({ userProfile, onProfileSubmit }) {
 
 /**
  * PUBLIC_INTERFACE
- * Enhanced DashboardPage with improved skill analysis & recommendation logic.
- * Skill suggestions and job matching use simple heuristics based on goals, synonyms, and missing strengths.
+ * DashboardPage: Displays top job matches and personalized recommendations for the user.
+ * Matching is based on analyzed skills/career goals with mock data.
  */
 function DashboardPage({ userProfile }) {
-  // --- Static Job Catalog ---
+  // Curated job mock data
   const jobs = [
     {
       title: "AI Product Manager",
-      skills: ['Product Management', 'AI Strategy', 'Communication', 'Leadership', 'Python', 'Technical Writing', 'Business Analysis'],
+      skills: ["Product Management", "AI Strategy", "Communication", "Leadership", "Python", "Technical Writing", "Business Analysis"],
       desc: "Drive development of cutting-edge AI products. Requires tech and business skills.",
-      tags: ['management', 'ai', 'software', 'product'],
+      tags: ["management", "ai", "software", "product"],
     },
     {
       title: "Luxury Brand Digital Marketer",
-      skills: ['Marketing', 'Branding', 'Creativity', 'Social Media', 'Storytelling', 'Analytics', 'SEO'],
+      skills: ["Marketing", "Branding", "Creativity", "Social Media", "Storytelling", "Analytics", "SEO"],
       desc: "Promote luxury brands with advanced digital strategies and creative storytelling.",
-      tags: ['marketing', 'brand', 'media', 'creative'],
+      tags: ["marketing", "brand", "media", "creative"],
     },
     {
       title: "Data Scientist",
-      skills: ['Python', 'ML', 'Data Analysis', 'Statistics', 'Critical Thinking', 'Visualization', 'SQL'],
+      skills: ["Python", "ML", "Data Analysis", "Statistics", "Critical Thinking", "Visualization", "SQL"],
       desc: "Use advanced analytics to deliver business insights for high-end clientele.",
-      tags: ['data', 'science', 'analytics', 'ml'],
+      tags: ["data", "science", "analytics", "ml"],
     },
     {
       title: "Customer Experience Lead",
-      skills: ['Empathy', 'Customer Service', 'CRM', 'Analytics', 'Leadership', 'Conflict Resolution', 'Operations'],
+      skills: ["Empathy", "Customer Service", "CRM", "Analytics", "Leadership", "Conflict Resolution", "Operations"],
       desc: "Enhance luxury customer journeys with top-tier service and strategic improvements.",
-      tags: ['customer', 'experience', 'service'],
+      tags: ["customer", "experience", "service"],
     }
   ];
 
-  // Synonyms dictionary for skill & goal heuristics
+  // Basic synonyms for boosting score if career goal matches
   const skillSynonyms = {
     "product manager": ["Product Management", "Product Strategy", "Roadmap", "Technical Writing"],
     "ai": ["AI Strategy", "Python", "ML", "Neural Networks"],
@@ -149,118 +152,146 @@ function DashboardPage({ userProfile }) {
     "digital": ["Digital Strategy", "SEO", "Social Media", "Analytics"],
     "strategy": ["AI Strategy", "Business Analysis", "Product Strategy", "Digital Strategy"],
     "lead": ["Leadership", "Mentorship", "Team Management"],
-    // Add more if desired
   };
 
-  // Heuristic: boost score if job matches explicit parts of career goals or synonyms for target role
-  function jobMatchScore(job, goals, userSkills) {
+  // Returns a match score and whyText for a job given user profile
+  function jobMatchScoreWithExplanation(job, goals, userSkillsArr) {
     let score = 0;
-    const jobSkillsSet = new Set(job.skills.map(s => s.toLowerCase()));
-    const userSkillsSet = new Set(userSkills.map(s => s.toLowerCase()));
-    // base: intersection of skills
-    for (let skill of userSkillsSet) {
-      if (jobSkillsSet.has(skill)) score += 1;
+    let explanations = [];
+    const userSkillsLower = (userSkillsArr || []).map(s => s.toLowerCase().trim());
+    const jobSkillsLower = job.skills.map(s => s.toLowerCase().trim());
+
+    // Skill match: direct overlap
+    let overlapSkills = userSkillsLower.filter(s => jobSkillsLower.includes(s));
+    if (overlapSkills.length > 0) {
+      score += overlapSkills.length;
+      explanations.push(`Direct skill match: ${overlapSkills.map(s => capitalizeSkill(s)).join(', ')}.`);
     }
-    // goal-to-job heuristics boost
-    if (goals) {
-      // Fuzzy tags and synonyms
+
+    // Career goal tag boosts
+    if (goals && typeof goals === "string" && goals.length > 0) {
       let g = goals.toLowerCase();
+      let goalTagsMatched = [];
       for (let tag of (job.tags || [])) {
-        if (g.includes(tag)) score += 2;
+        if (g.includes(tag)) {
+          score += 2;
+          goalTagsMatched.push(tag);
+        }
       }
-      // Synonymic boost
+      if (goalTagsMatched.length)
+        explanations.push(`Matched to your goal keywords: ${goalTagsMatched.join(', ')}.`);
+    }
+
+    // Synonym phrase boosts (from skillSynonyms)
+    if (goals && typeof goals === "string" && goals.length > 0) {
+      let g = goals.toLowerCase();
+      let matchedSynonyms = [];
       for (let key in skillSynonyms) {
         if (g.includes(key)) {
-          for (let recSkill of skillSynonyms[key]) {
-            if (jobSkillsSet.has(recSkill.toLowerCase())) {
-              score += 1.2; // partial but less than direct tag
+          let keyHits = [];
+          for (let syn of skillSynonyms[key]) {
+            if (jobSkillsLower.includes(syn.toLowerCase())) {
+              score += 1.2;
+              keyHits.push(syn);
             }
           }
+          if (keyHits.length > 0)
+            matchedSynonyms.push(...keyHits);
         }
       }
+      if (matchedSynonyms.length)
+        explanations.push(`Related to your goal (“${matchedSynonyms.join(', ')}”).`);
     }
-    return score;
+
+    // If no skills matched, fallback explanation
+    if (score === 0) {
+      explanations.push("No direct match, but this job is featured as a top market role.");
+    }
+
+    return {
+      score,
+      why: explanations.join(" ")
+    };
   }
 
-  // PUBLIC_INTERFACE
-  function recommendSkills(userSkills, goals) {
-    // Start with missing skills from best-matching jobs
-    const userSet = new Set((userSkills || []).map(s => s.toLowerCase()));
-    let recommendations = [];
-
-    // Optionally guess target skills via goal-noun analysis/synonyms
-    let goalTerms = (goals || '').toLowerCase().split(/[\s,.;:!?]+/);
-    let goalSkillCandidates = [];
-    for (let t of goalTerms) {
-      for (let [phrase, skills] of Object.entries(skillSynonyms)) {
-        if (t && (t === phrase || phrase.includes(t) || t.includes(phrase))) {
-          for (let s of skills) {
-            if (!userSet.has(s.toLowerCase())) {
-              goalSkillCandidates.push(s);
-            }
-          }
-        }
+  // Capitalize skill names from lowercased form
+  function capitalizeSkill(skill) {
+    // Match from jobs for accurate case, else capitalize
+    for (const j of jobs) {
+      for (const s of j.skills) {
+        if (s.toLowerCase() === skill) return s;
       }
     }
+    return skill.charAt(0).toUpperCase() + skill.slice(1);
+  }
 
-    // Best 2 matched jobs (using improved heuristics and user's profile)
-    const scoredJobs = jobs.map(j => ({ ...j, score: jobMatchScore(j, goals, userSkills || []) }));
-    scoredJobs.sort((a, b) => b.score - a.score);
+  // Get top matches with explanations
+  function getTopMatchingJobs(userProfile) {
+    const { skills = [], goals = '' } = userProfile;
+    let jobScores = jobs.map(job => {
+      const { score, why } = jobMatchScoreWithExplanation(job, goals, skills);
+      return { ...job, score, why };
+    });
+    jobScores.sort((a, b) => b.score - a.score);
 
-    // Gather missing skills from top 2 jobs, prioritize those found in both
-    let extraSkills = {};
-    let considered = 0;
-    for (let job of scoredJobs.slice(0, 2)) {
+    // Only show jobs with nonzero score if available
+    let nonzero = jobScores.filter(j => j.score > 0);
+    return (nonzero.length >= 2 ? nonzero.slice(0, 2) : jobScores.slice(0, 2));
+  }
+
+  // Recommend missing skills from top jobs not in user profile
+  function recommendSkills(userProfile) {
+    const userSkillsLower = (userProfile.skills || []).map(s => s.toLowerCase());
+    let topJobs = getTopMatchingJobs(userProfile);
+
+    // Gather all missing skills from both jobs, prioritized if missing in profile and in both jobs
+    let missingSkillCounts = {};
+    for (let job of topJobs) {
       for (let s of job.skills) {
-        const key = s.toLowerCase();
-        if (!userSet.has(key)) {
-          extraSkills[key] = (extraSkills[key] || 0) + 1;
+        let sLower = s.toLowerCase();
+        if (!userSkillsLower.includes(sLower)) {
+          missingSkillCounts[s] = (missingSkillCounts[s] || 0) + 1;
         }
       }
-      considered++;
     }
-    // Convert to sorted array (most frequently recommended skills first)
-    let sortedExtra = Object.entries(extraSkills)
-      .sort((a, b) => b[1] - a[1])
-      .map(([skill]) => {
-        // Restore case
-        for (let job of jobs) {
-          for (let ss of job.skills) {
-            if (ss.toLowerCase() === skill) return ss;
+    // Sorted: skills missing from both jobs (2), then 1, then alphabetically
+    let recs = Object.entries(missingSkillCounts)
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+      .map(([s]) => s);
+
+    // Additional: parse goals for possible relevant skills
+    const goalTerms = ((userProfile.goals || '').toLowerCase().match(/\w+/g) || []);
+    let fromGoal = [];
+    for (let t of goalTerms) {
+      for (const [phrase, skills] of Object.entries(skillSynonyms)) {
+        if (t && (t === phrase || phrase.includes(t) || t.includes(phrase))) {
+          for (const s of skills) {
+            if (!userSkillsLower.includes(s.toLowerCase()) && !recs.includes(s)) {
+              fromGoal.push(s);
+            }
           }
         }
-        return skill; // fallback, lowercase
-      });
-
-    // Merge in goal-based suggestions first, then high-priority job-suggested
-    for (let gs of goalSkillCandidates) {
-      if (!recommendations.includes(gs)) recommendations.push(gs);
+      }
     }
-    for (let ex of sortedExtra) {
-      if (!recommendations.includes(ex)) recommendations.push(ex);
-    }
-    // Remove duplicates
-    recommendations = Array.from(new Set(recommendations));
-    return recommendations.slice(0, 5);
+    // Combine and dedupe, goal recs first
+    let unique = Array.from(new Set([...fromGoal, ...recs]));
+    return unique.slice(0, 5);
   }
 
-  // Map jobs with their enhanced scores
-  const jobScores = jobs.map(j =>
-    ({ ...j, score: jobMatchScore(j, userProfile.goals, userProfile.skills || []) })
-  );
-  jobScores.sort((a, b) => b.score - a.score);
-  const matchedJobs = jobScores.slice(0, 2);
+  // Rendering
+  const validProfile =
+    userProfile.name &&
+    Array.isArray(userProfile.skills) && userProfile.skills.length > 0 &&
+    userProfile.goals;
 
-  // Recommendations
-  const skillRecommendations = recommendSkills(userProfile?.skills || [], userProfile?.goals || '');
+  const topMatches = getTopMatchingJobs(userProfile);
+  const skillRecs = recommendSkills(userProfile);
 
   return (
     <div className="lux-card-center">
       <div className="lux-card">
         <div className="lux-card-title">Your Match Results</div>
-        {( !userProfile.name
-            || !Array.isArray(userProfile.skills) || userProfile.skills.length === 0
-            || !userProfile.goals ) ? (
+        {!validProfile ? (
           <div>
             <div className="lux-error">No profile data entered yet.
               <br />
@@ -276,7 +307,7 @@ function DashboardPage({ userProfile }) {
             </div>
             <div className="lux-section-title">Top Job Matches</div>
             <div className="lux-job-matches">
-              {matchedJobs.map((job, idx) => (
+              {topMatches.map((job, idx) => (
                 <div className="lux-job-card" key={job.title + idx}>
                   <div className="lux-job-title">{job.title}</div>
                   <div className="lux-job-desc">{job.desc}</div>
@@ -287,14 +318,15 @@ function DashboardPage({ userProfile }) {
                     )}
                   </div>
                   <div className="lux-job-score">
-                    Match Score: <b>{job.score.toFixed(1)}</b>
+                    Match Score: <b>{job.score.toFixed(1)}</b><br />
+                    <span className="lux-small-text">{job.why}</span>
                   </div>
                 </div>
               ))}
             </div>
             <div className="lux-section-title">Recommended Skills to Add</div>
             <div className="lux-skill-recs">
-              {skillRecommendations.length ? skillRecommendations.map((s, k) =>
+              {skillRecs.length ? skillRecs.map((s, k) =>
                 <span className="lux-skill-rec-badge" key={s + k}>{s}</span>
               ) : <span className="lux-small-text">No recommendations—excellent skill fit!</span>}
             </div>
