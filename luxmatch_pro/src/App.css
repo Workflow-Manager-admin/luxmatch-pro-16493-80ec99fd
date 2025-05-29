@@ -1,9 +1,18 @@
 :root {
-  --kavia-orange: #E87A41;
-  --kavia-dark: #1A1A1A;
-  --text-color: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --border-color: rgba(255, 255, 255, 0.1);
+  --primary: #ff0026;
+  --secondary: #3400ff;
+  --accent: #ffffff;
+  --lux-shadow: 0 6px 32px 0 rgba(52, 0, 255, 0.08), 0 2.5px 8px 0 rgba(0,0,0,0.05);
+  --lux-radius: 22px;
+  --lux-border: 1px solid rgba(52,0,255, 0.07);
+  --lux-gray: #faf9fd;
+  --lux-dark: #162131;
+  --lux-link: #3400ff;
+  --lux-link-hover: #210098;
+  --lux-small-text: #736f78;
+  --lux-section-title: #312051;
+  --lux-err: #ff4e66;
+  --lux-gradient: linear-gradient(135deg, #ff0026 0%, #3400ff 100%);
 }
 
 body {
