@@ -35,8 +35,9 @@ function HomePage() {
 /**
  * PUBLIC_INTERFACE
  * ProfilePage: User profile entry page for name, skills, career goals.
- * Handles input and submits to main app state.
+ * Handles input and submits to main app state and navigates to dashboard.
  */
+import { useNavigate } from 'react-router-dom';
 function ProfilePage({ userProfile, onProfileSubmit }) {
   // State for each field, with default to passed userProfile prop values
   const [name, setName] = useState(userProfile.name || '');
@@ -47,6 +48,7 @@ function ProfilePage({ userProfile, onProfileSubmit }) {
   );
   const [goals, setGoals] = useState(userProfile.goals || '');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -60,6 +62,8 @@ function ProfilePage({ userProfile, onProfileSubmit }) {
       .map(s => s.trim())
       .filter(Boolean);
     onProfileSubmit({ name, skills: parsedSkills, goals });
+    // Go to dashboard programmatically after storing state
+    navigate('/dashboard');
   }
 
   return (
@@ -356,7 +360,10 @@ function AboutPage() {
   );
 }
 
-// PUBLIC_INTERFACE
+/*
+ * PUBLIC_INTERFACE
+ * App handles main state (userProfile) and routing
+ */
 function App() {
   const [userProfile, setUserProfile] = useState({
     name: '',
@@ -364,10 +371,10 @@ function App() {
     goals: ''
   });
 
-  // Handler for updating profile
+  // Handler for updating profile.
   function handleProfileSubmit(profile) {
     setUserProfile(profile);
-    window.location.href = "/dashboard";
+    // Navigation will be handled in ProfilePage with useNavigate after setting state!
   }
 
   // The main gradient background and responsive layout
