@@ -18,100 +18,325 @@
 body {
   margin: 0;
   font-family: 'Inter', 'Roboto', 'Helvetica', 'Arial', sans-serif;
-  background-color: var(--kavia-dark);
-  color: var(--text-color);
+  background: var(--lux-gradient);
+  min-height: 100vh;
+  color: var(--lux-dark);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-.app {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-.navbar {
-  background-color: var(--kavia-dark);
-  padding: 16px;
+/* NAVBAR */
+.lux-navbar {
+  background: rgba(255,255,255, 0.82);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border-bottom: var(--lux-border);
+  height: 64px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--border-color);
   position: fixed;
-  top: 0;
+  top: 0; left: 0;
   width: 100%;
-  box-sizing: border-box;
-  z-index: 100;
+  z-index: 900;
+  box-shadow: 0 6px 14px 0 rgba(52,0,255,0.03);
 }
 
-.logo {
-  font-size: 1.25rem;
-  font-weight: 600;
+.lux-navbar-content {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: center;
+  padding: 0 32px;
+}
+
+.lux-logo {
+  font-size: 1.23rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--primary);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  user-select: none;
+}
+.lux-logo-symbol {
+  color: var(--primary);
+  font-size: 1.3em;
+  font-family: serif;
+  padding-right: 1px;
+  filter: drop-shadow(0 1px 3px #fff3);
+}
+.lux-pro {
+  color: var(--secondary);
+  margin-left: 4px;
+  font-weight: 600;
+  font-size: 0.92em;
 }
 
-.logo-symbol {
-  color: var(--kavia-orange);
+.lux-navlinks {
+  display: flex;
+  gap: 26px;
+}
+.lux-link {
+  color: var(--lux-link);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1.06em;
+  border-radius: 9px;
+  padding: 7px 19px;
+  background: transparent;
+  transition: color 0.20s, background 0.18s;
+}
+.lux-link:hover, .lux-link.active {
+  text-decoration: none;
+  color: var(--primary);
+  background: rgba(255,0,38,0.08);
 }
 
-.container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 0 24px;
-  width: 100%;
+/* LUX BG AND CENTERING */
+.lux-app-bg {
+  min-height: 100vh;
   box-sizing: border-box;
-}
-
-.hero {
-  padding-top: 120px;
-  padding-bottom: 64px;
-  text-align: center;
+  background: var(--lux-gradient);
   display: flex;
   flex-direction: column;
+}
+.lux-main {
+  padding-top: 80px;
+  min-height: 80vh;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* LUX CARD CENTERING */
+.lux-card-center {
+  display: flex;
   align-items: center;
-  gap: 24px;
+  justify-content: center;
+  min-height: 75vh;
+  width: 100%;
+  padding: 1rem 0;
 }
 
-.subtitle {
-  color: var(--kavia-orange);
-  font-weight: 500;
-  font-size: 1.1rem;
+/* LUX CARD STYLES */
+.lux-card {
+  background: var(--accent);
+  border-radius: var(--lux-radius);
+  box-shadow: var(--lux-shadow);
+  padding: 2.5rem 1.6rem 2.6rem 1.6rem;
+  max-width: 475px;
+  width: 100vw;
+  margin: 0 auto;
+  min-height: 370px;
+  border: var(--lux-border);
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  align-items: stretch;
+  animation: pop-in-card .7s cubic-bezier(.57,2.05,.60,.71) 0.03s 1;
+}
+@keyframes pop-in-card {
+  from { transform: translateY(35px) scale(0.98); opacity: 0.01;}
+  to { transform: none; opacity: 1;}
+}
+.lux-card-title {
+  font-size: 2.14rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 12px;
+}
+.lux-card-desc {
+  color: #7e7e81;
+  font-size: 1.14rem;
+  line-height: 1.56;
+  margin-bottom: 1.6rem;
 }
 
-.title {
-  font-size: 3.5rem;
+/* FORM */
+.lux-profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.22rem;
+}
+.lux-profile-form label {
+  display: flex;
+  flex-direction: column;
+  color: #312051;
   font-weight: 600;
-  line-height: 1.2;
-  margin: 0;
+  font-size: 1.06em;
+  margin-bottom: 3px;
+  gap: 7px;
+}
+.lux-input {
+  margin-top: 3px;
+  padding: 9px 13px;
+  border-radius: 8px;
+  border: 1.2px solid #ececfa;
+  background: #f9f9fd;
+  font-size: 1.04em;
+  outline: none;
+  transition: border 0.15s;
+  color: #312051;
+}
+.lux-input:focus {
+  border: 1.2px solid var(--secondary);
+  background: #fff;
 }
 
-.description {
-  font-size: 1.1rem;
-  line-height: 1.5;
-  color: var(--text-secondary);
-  max-width: 600px;
-  margin-bottom: 16px;
-}
-
-.btn {
-  background-color: var(--kavia-orange);
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 10px 20px;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.btn:hover {
-  background-color: #FF8B4D;
-}
-
-.btn-large {
+/* BUTTONS */
+.lux-btn {
+  display: inline-block;
   padding: 12px 24px;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
+  border-radius: 9px;
+  border: none;
+  outline: none;
+  font-weight: 700;
+  background: var(--primary);
+  color: var(--accent);
+  cursor: pointer;
+  box-shadow: 0 2px 6px 0 rgba(52,0,255,0.07);
+  margin-top: 12px;
+  transition: background 0.16s, color 0.18s;
+  text-decoration: none;
+}
+.lux-btn-primary {
+  background: var(--primary);
+  color: var(--accent);
+}
+.lux-btn-primary:hover {
+  background: var(--secondary);
+  color: #fff;
+}
+.lux-btn-secondary {
+  background: var(--secondary);
+  color: #fff;
+}
+.lux-btn-secondary:hover {
+  background: var(--primary);
+  color: #fff;
+}
+.lux-btn:active {
+  transform: scale(0.97);
+}
+
+/* DASHBOARD & JOB MATCHES */
+.lux-section-title {
+  font-size: 1.22rem;
+  font-weight: 600;
+  margin-top: 0.8rem;
+  margin-bottom: 0.6rem;
+  color: var(--lux-section-title);
+}
+.lux-job-matches {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-bottom: 7px;
+}
+.lux-job-card {
+  border-radius: 14px;
+  box-shadow: 0 2.5px 7px 0 rgba(52,0,255,0.11);
+  background: #f5f5fe;
+  padding: 21px 18px 15px 18px;
+  margin-bottom: 5px;
+  border: 1.1px solid #ede6ff;
+  transition: box-shadow 0.18s;
+}
+.lux-job-title {
+  font-weight: 650;
+  font-size: 1.14em;
+  color: var(--primary);
+  margin-bottom: 7px;
+}
+.lux-job-desc {
+  color: #736f78;
+  margin-bottom: 8px;
+}
+.lux-job-skills {
+  margin-bottom: 6px;
+}
+.lux-skill-badge {
+  display: inline-block;
+  padding: 3px 13px;
+  font-size: 0.98em;
+  border-radius: 6px;
+  margin: 0 8px 6px 0;
+  background: linear-gradient(125deg,#fff,#f1edfd);
+  color: #4e3295;
+  border: 1px solid #eae5ff;
+  font-weight: 520;
+}
+.lux-job-score {
+  font-size: 0.96em;
+  color: var(--secondary);
+  font-weight: 600;
+  margin-top: 3px;
+}
+.lux-skill-recs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+.lux-skill-rec-badge {
+  background: var(--secondary);
+  color: #fff;
+  border-radius: 8px;
+  font-size: 0.99em;
+  padding: 7px 14px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  box-shadow: 0 1.5px 6px 0 #f3f1ff;
+}
+
+/* Utilities */
+.lux-small-text {
+  color: var(--lux-small-text);
+  font-size: 0.91em;
+}
+.lux-user-meta {
+  margin-bottom: 13px;
+  color: var(--lux-dark);
+  background: #f7f5fd;
+  border-radius: 10px;
+  padding: 11px 20px 8px 13px;
+  font-size: 1.08em;
+  box-shadow: 0 0.5px 2.5px 0 #4020ff07;
+}
+.lux-user-label {
+  font-weight: 520;
+  font-size: 0.92em;
+  color: #6457b5;
+  margin-left: 5px;
+}
+.lux-user-info {
+  font-size: 0.97em;
+  color: #48416b;
+}
+.lux-error {
+  color: var(--lux-err);
+  background: #fff2f7;
+  border-radius: 9px;
+  padding: 9px 15px;
+  margin-top: 8px;
+  font-size: 1.05em;
+  border: 1px solid #ffeaea;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+  .lux-card { padding: 1.1rem 0.7rem 1.2rem 0.7rem; max-width: 98vw; }
+  .lux-navbar-content { padding: 0 10px; }
+}
+@media (max-width: 480px) {
+  .lux-navbar { height: 52px; }
+  .lux-main { padding-top: 60px; }
+  .lux-card { min-height: 340px;}
+  .lux-card-title { font-size: 1.3rem;}
+  .lux-card-center { min-height: 83vh;}
+  .lux-navlinks { gap: 10px;}
+  .lux-link { font-size: 0.97em; padding: 7px 6px;}
 }
