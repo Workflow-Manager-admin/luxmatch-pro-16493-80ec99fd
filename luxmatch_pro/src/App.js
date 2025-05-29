@@ -34,8 +34,14 @@ function HomePage() {
 
 // PUBLIC_INTERFACE
 function ProfilePage({ userProfile, onProfileSubmit }) {
+  // Always use string for skills input value
   const [name, setName] = useState(userProfile.name || '');
-  const [skills, setSkills] = useState(userProfile.skills || '');
+  // If userProfile.skills is an array, show as CSV. If not, fallback to string.
+  const [skills, setSkills] = useState(
+    Array.isArray(userProfile.skills)
+      ? userProfile.skills.join(', ')
+      : (userProfile.skills || '')
+  );
   const [goals, setGoals] = useState(userProfile.goals || '');
   const [error, setError] = useState('');
 
@@ -46,8 +52,11 @@ function ProfilePage({ userProfile, onProfileSubmit }) {
       return;
     }
     setError('');
+    // Parse skills input to array, trim each
     const parsedSkills = skills.split(',').map(s => s.trim()).filter(Boolean);
     onProfileSubmit({ name, skills: parsedSkills, goals });
+    // Optionally reset the form here if desired
+    // setName(""); setSkills(""); setGoals("");
   }
 
   return (
@@ -249,7 +258,9 @@ function DashboardPage({ userProfile }) {
     <div className="lux-card-center">
       <div className="lux-card">
         <div className="lux-card-title">Your Match Results</div>
-        {(!userProfile.name || !userProfile.skills || !userProfile.goals) ? (
+        {( !userProfile.name
+            || !Array.isArray(userProfile.skills) || userProfile.skills.length === 0
+            || !userProfile.goals ) ? (
           <div>
             <div className="lux-error">No profile data entered yet.
               <br />
