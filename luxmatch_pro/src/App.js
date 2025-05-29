@@ -32,12 +32,15 @@ function HomePage() {
   );
 }
 
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import './App.css';
+
 /**
  * PUBLIC_INTERFACE
  * ProfilePage: User profile entry page for name, skills, career goals.
  * Handles input and submits to main app state and navigates to dashboard.
  */
-import { useNavigate } from 'react-router-dom';
 function ProfilePage({ userProfile, onProfileSubmit }) {
   // State for each field, with default to passed userProfile prop values
   const [name, setName] = useState(userProfile.name || '');
