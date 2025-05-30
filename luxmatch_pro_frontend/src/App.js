@@ -205,12 +205,18 @@ function NotFound() {
   );
 }
 
+/**
+ * Main App: now manages 'role' and 'domainName' state and passes them to Profile.
+ */
 // PUBLIC_INTERFACE
 function LuxMatchProApp() {
   // State for Profile
   const [name, setName] = useState('');
   const [skillsInput, setSkillsInput] = useState('');
   const [goals, setGoals] = useState('');
+  // New fields for role and domain name
+  const [role, setRole] = useState('');
+  const [domainName, setDomainName] = useState('');
   const [analyzed, setAnalyzed] = useState(false);
 
   // Results state after analysis
@@ -226,7 +232,8 @@ function LuxMatchProApp() {
       .map(s => s.trim())
       .filter(Boolean);
 
-    setProfile({ name, skills, goals });
+    // Store all entered data in profile object, including new fields
+    setProfile({ name, skills, goals, role, domainName });
 
     // --- Mock job matching ---
     // (In real app, would use API/matching logic)
@@ -287,6 +294,10 @@ function LuxMatchProApp() {
                   setSkillsInput={setSkillsInput}
                   goals={goals}
                   setGoals={setGoals}
+                  role={role}
+                  setRole={setRole}
+                  domainName={domainName}
+                  setDomainName={setDomainName}
                   handleAnalyze={handleAnalyze}
                 />
               }
