@@ -44,6 +44,8 @@ function Home() {
   );
 }
 
+import { useNavigate } from 'react-router-dom';
+
 // PUBLIC_INTERFACE
 function Profile({
   name, setName,
@@ -51,12 +53,20 @@ function Profile({
   goals, setGoals,
   handleAnalyze
 }) {
+  const navigate = useNavigate();
+
+  // Handle form submit: analyze profile, then redirect to dashboard
+  function handleAnalyzeAndRedirect() {
+    handleAnalyze();
+    navigate("/dashboard");
+  }
+
   return (
     <div className="lm-center-vertical">
       <Card>
         <h2 className="lm-gradient-text">Profile Analysis</h2>
         <form
-          onSubmit={e => { e.preventDefault(); handleAnalyze(); }}
+          onSubmit={e => { e.preventDefault(); handleAnalyzeAndRedirect(); }}
           className="lm-form"
         >
           <label>
