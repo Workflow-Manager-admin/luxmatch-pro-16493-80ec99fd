@@ -46,11 +46,16 @@ function Home() {
 }
 
  
+/**
+ * Profile component: Now includes 'role' and 'domainName' controlled fields.
+ */
 // PUBLIC_INTERFACE
 function Profile({
   name, setName,
   skillsInput, setSkillsInput,
   goals, setGoals,
+  role, setRole,
+  domainName, setDomainName,
   handleAnalyze
 }) {
   const navigate = useNavigate();
@@ -97,6 +102,26 @@ function Profile({
               required
               placeholder="e.g., Frontend Engineer, Team Lead"
               onChange={e => setGoals(e.target.value)}
+            />
+          </label>
+          <label>
+            Role
+            <input
+              type="text"
+              value={role}
+              required
+              placeholder="e.g., Frontend Developer, Data Analyst"
+              onChange={e => setRole(e.target.value)}
+            />
+          </label>
+          <label>
+            Domain Name
+            <input
+              type="text"
+              value={domainName}
+              required
+              placeholder="e.g., IT, Healthcare, Finance"
+              onChange={e => setDomainName(e.target.value)}
             />
           </label>
           <button className="lm-btn lm-btn-primary lm-btn-block" type="submit">Analyze</button>
