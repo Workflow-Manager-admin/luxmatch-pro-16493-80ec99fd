@@ -154,6 +154,15 @@ body {
   background: var(--lux-secondary);
 }
 
+/* Tooltip styling for submit button */
+.lm-submit-tooltip {
+  /* Shared style with inline override for positioning */
+  transition: opacity .16s;
+  opacity: 1;
+  font-family: inherit;
+  letter-spacing: 0.01rem;
+}
+
 .lm-home-actions {
   margin-top: 1.5rem;
   text-align: center;

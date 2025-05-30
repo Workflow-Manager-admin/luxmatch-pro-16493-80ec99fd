@@ -49,6 +49,9 @@ function Home() {
 /**
  * Profile component: Now includes 'role' and 'domainName' controlled fields.
  */
+/**
+ * Profile component: Now includes a Submit button with hover disclaimer tooltip.
+ */
 // PUBLIC_INTERFACE
 function Profile({
   name, setName,
@@ -59,6 +62,9 @@ function Profile({
   handleAnalyze
 }) {
   const navigate = useNavigate();
+
+  // Tooltip state
+  const [isTooltipVisible, setTooltipVisible] = React.useState(false);
 
   // Handle form submit: analyze profile, then redirect to dashboard
   function handleAnalyzeAndRedirect() {
@@ -124,7 +130,41 @@ function Profile({
               onChange={e => setDomainName(e.target.value)}
             />
           </label>
-          <button className="lm-btn lm-btn-primary lm-btn-block" type="submit">Analyze</button>
+          <div style={{ position: "relative", width: "100%" }}>
+            <button
+              className="lm-btn lm-btn-primary lm-btn-block"
+              type="submit"
+              onMouseEnter={() => setTooltipVisible(true)}
+              onMouseLeave={() => setTooltipVisible(false)}
+              style={{ position: "relative", width: "100%" }}
+            >
+              Submit
+            </button>
+            {/* Tooltip */}
+            {isTooltipVisible && (
+              <div
+                style={{
+                  position: "absolute",
+                  left: "50%",
+                  top: "-46px",
+                  transform: "translateX(-50%)",
+                  background: "#222",
+                  color: "#fff",
+                  padding: "7.5px 14px",
+                  borderRadius: "7px",
+                  boxShadow: "0 2px 10px rgba(0,0,0,0.14)",
+                  whiteSpace: "nowrap",
+                  zIndex: 10,
+                  fontSize: ".94rem",
+                  fontWeight: 500,
+                  pointerEvents: "none"
+                }}
+                className="lm-submit-tooltip"
+              >
+                are you sure to apply to all the applications
+              </div>
+            )}
+          </div>
         </form>
       </Card>
     </div>
