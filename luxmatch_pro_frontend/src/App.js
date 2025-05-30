@@ -63,9 +63,6 @@ function Profile({
 }) {
   const navigate = useNavigate();
 
-  // Tooltip state
-  const [isTooltipVisible, setTooltipVisible] = React.useState(false);
-
   // Handle form submit: analyze profile, then redirect to dashboard
   function handleAnalyzeAndRedirect() {
     handleAnalyze();
@@ -130,41 +127,7 @@ function Profile({
               onChange={e => setDomainName(e.target.value)}
             />
           </label>
-          <div style={{ position: "relative", width: "100%" }}>
-            <button
-              className="lm-btn lm-btn-primary lm-btn-block"
-              type="submit"
-              onMouseEnter={() => setTooltipVisible(true)}
-              onMouseLeave={() => setTooltipVisible(false)}
-              style={{ position: "relative", width: "100%" }}
-            >
-              Submit
-            </button>
-            {/* Tooltip */}
-            {isTooltipVisible && (
-              <div
-                style={{
-                  position: "absolute",
-                  left: "50%",
-                  top: "-46px",
-                  transform: "translateX(-50%)",
-                  background: "#222",
-                  color: "#fff",
-                  padding: "7.5px 14px",
-                  borderRadius: "7px",
-                  boxShadow: "0 2px 10px rgba(0,0,0,0.14)",
-                  whiteSpace: "nowrap",
-                  zIndex: 10,
-                  fontSize: ".94rem",
-                  fontWeight: 500,
-                  pointerEvents: "none"
-                }}
-                className="lm-submit-tooltip"
-              >
-                are you sure to apply to all the applications
-              </div>
-            )}
-          </div>
+          {/* Removed Submit button and tooltip from Profile as per new requirements */}
         </form>
       </Card>
     </div>
@@ -173,6 +136,15 @@ function Profile({
 
 // PUBLIC_INTERFACE
 function Dashboard({ profile, jobs, recommendations }) {
+  // Tooltip state for Dashboard's Submit button
+  const [isTooltipVisible, setTooltipVisible] = React.useState(false);
+
+  function handleDashboardSubmit(e) {
+    e.preventDefault();
+    // You could add actual submit logic here (for now just alert or similar)
+    alert('Submit action triggered for all applications.');
+  }
+
   return (
     <div className="lm-center-vertical">
       <Card>
@@ -202,6 +174,41 @@ function Dashboard({ profile, jobs, recommendations }) {
             ))}
           </ul>
         </div>
+        {/* Moved Submit button and its tooltip to Dashboard */}
+        <form onSubmit={handleDashboardSubmit} style={{ marginTop: 38, position: "relative", width: "100%" }}>
+          <button
+            className="lm-btn lm-btn-primary lm-btn-block"
+            type="submit"
+            onMouseEnter={() => setTooltipVisible(true)}
+            onMouseLeave={() => setTooltipVisible(false)}
+            style={{ position: "relative", width: "100%" }}
+          >
+            Submit
+          </button>
+          {isTooltipVisible && (
+            <div
+              style={{
+                position: "absolute",
+                left: "50%",
+                top: "-46px",
+                transform: "translateX(-50%)",
+                background: "#222",
+                color: "#fff",
+                padding: "7.5px 14px",
+                borderRadius: "7px",
+                boxShadow: "0 2px 10px rgba(0,0,0,0.14)",
+                whiteSpace: "nowrap",
+                zIndex: 10,
+                fontSize: ".94rem",
+                fontWeight: 500,
+                pointerEvents: "none"
+              }}
+              className="lm-submit-tooltip"
+            >
+              are you sure to apply to all the applications
+            </div>
+          )}
+        </form>
       </Card>
     </div>
   );
