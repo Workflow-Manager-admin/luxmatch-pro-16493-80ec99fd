@@ -144,13 +144,25 @@ function Profile({
 
 // PUBLIC_INTERFACE
 function Dashboard({ profile, jobs, recommendations }) {
-  // Tooltip state for Dashboard's Submit button
+  // Tooltip state for Dashboard's bulk-apply button
   const [isTooltipVisible, setTooltipVisible] = React.useState(false);
 
-  function handleDashboardSubmit(e) {
+  /**
+   * PUBLIC_INTERFACE
+   * Handles the bulk application to all matched jobs.
+   * For now, simply shows titles of all jobs.
+   * In a real app, would initiate application process for all jobs in "jobs".
+   */
+  function handleBulkApply(e) {
     e.preventDefault();
-    // You could add actual submit logic here (for now just alert or similar)
-    alert('Submit action triggered for all applications.');
+    if (jobs && jobs.length > 0) {
+      const jobTitles = jobs.map(job => job.title).join(", ");
+      alert(
+        `Application(s) submitted for all matched jobs:\n\n${jobTitles}`
+      );
+    } else {
+      alert("No matched jobs to apply for.");
+    }
   }
 
   return (
@@ -182,38 +194,39 @@ function Dashboard({ profile, jobs, recommendations }) {
             ))}
           </ul>
         </div>
-        {/* Moved Submit button and its tooltip to Dashboard */}
-        <form onSubmit={handleDashboardSubmit} style={{ marginTop: 38, position: "relative", width: "100%" }}>
+        {/* "Apply to All Jobs" button for matched jobs bulk application */}
+        <form onSubmit={handleBulkApply} style={{ marginTop: 38, position: "relative", width: "100%" }}>
           <button
             className="lm-btn lm-btn-primary lm-btn-block"
             type="submit"
             onMouseEnter={() => setTooltipVisible(true)}
             onMouseLeave={() => setTooltipVisible(false)}
             style={{ position: "relative", width: "100%" }}
+            aria-label="Apply to all displayed job matches"
           >
-            Submit
+            Apply to All Jobs
           </button>
           {isTooltipVisible && (
             <div
               style={{
                 position: "absolute",
                 left: "50%",
-                top: "-46px",
+                top: "-50px",
                 transform: "translateX(-50%)",
                 background: "#222",
                 color: "#fff",
-                padding: "7.5px 14px",
+                padding: "8px 16px",
                 borderRadius: "7px",
                 boxShadow: "0 2px 10px rgba(0,0,0,0.14)",
                 whiteSpace: "nowrap",
                 zIndex: 10,
-                fontSize: ".94rem",
+                fontSize: ".97rem",
                 fontWeight: 500,
                 pointerEvents: "none"
               }}
               className="lm-submit-tooltip"
             >
-              are you sure to apply to all the applications
+              This will submit applications to <b>all matched jobs shown</b> above.
             </div>
           )}
         </form>
