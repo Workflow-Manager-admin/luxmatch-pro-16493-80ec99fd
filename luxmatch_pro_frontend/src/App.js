@@ -127,7 +127,15 @@ function Profile({
               onChange={e => setDomainName(e.target.value)}
             />
           </label>
-          {/* Removed Submit button and tooltip from Profile as per new requirements */}
+          {/* Analyze button for triggering profile analysis and navigation */}
+          <button
+            type="button"
+            className="lm-btn lm-btn-primary lm-btn-block"
+            onClick={handleAnalyzeAndRedirect}
+            style={{ marginTop: 14 }}
+          >
+            Analyze
+          </button>
         </form>
       </Card>
     </div>
