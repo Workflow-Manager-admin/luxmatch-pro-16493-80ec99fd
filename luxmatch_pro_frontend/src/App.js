@@ -45,8 +45,7 @@ function Home() {
   );
 }
 
-import { useNavigate } from 'react-router-dom';
-
+ 
 // PUBLIC_INTERFACE
 function Profile({
   name, setName,

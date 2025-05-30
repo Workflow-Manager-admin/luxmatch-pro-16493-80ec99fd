@@ -91,3 +91,6 @@ src/App.js
   Line 48:9:  Parsing error: Identifier 'useNavigate' has already been declared. (48:9)
 
 webpack compiled with 2 errors
+Compiling...
+Compiled successfully!
+webpack compiled successfully
