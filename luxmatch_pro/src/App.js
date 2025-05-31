@@ -198,36 +198,57 @@ function ProfileAnalysis({ profileData, setProfileData, onSubmit }) {
 
 // PUBLIC_INTERFACE
 function Dashboard({ profileData }) {
-  if (!profileData.name || !profileData.skills?.length || !profileData.goal) {
+  if (
+    !profileData.name ||
+    !profileData.skills?.length ||
+    !profileData.goal ||
+    !profileData.role ||
+    !profileData.domain
+  ) {
     return (
       <section className="lux-maincard">
         <div style={{ textAlign: 'center', margin: '32px 0' }}>
           <div className="lux-msg">You haven't analyzed your profile yet.</div>
-          <NavLink to="/profile"><button className="lux-btn" style={{marginTop: 16}}>Go to Profile Analysis</button></NavLink>
+          <NavLink to="/profile">
+            <button className="lux-btn" style={{ marginTop: 16 }}>
+              Go to Profile Analysis
+            </button>
+          </NavLink>
         </div>
       </section>
     );
   }
+  // Optionally, the matching logic could use role and domain later
   // Calculate results
   const matchedJobs = getMockJobs(profileData.skills, profileData.goal);
   const skillRecs = getMockSkills(profileData.skills, matchedJobs);
 
   return (
     <section className="lux-maincard">
-      <h2 className="lux-section-title">{profileData.name.split(' ')[0]}'s Personalized Dashboard</h2>
+      <h2 className="lux-section-title">
+        {profileData.name.split(' ')[0]}'s Personalized Dashboard
+      </h2>
+      <div className="lux-desc" style={{ textAlign: 'center', marginBottom: 24 }}>
+        <strong>Desired Role:</strong> {profileData.role} &nbsp;&nbsp;|&nbsp;&nbsp;
+        <strong>Domain:</strong> {profileData.domain}
+      </div>
       <div className="lux-dash-columns">
         <div className="lux-dash-card">
           <div className="lux-dash-title">Top Matched Jobs</div>
           <ul className="lux-job-list">
             {matchedJobs.map((job, i) => (
-              <li key={i}><span className="lux-job-title">{job.title}</span></li>
+              <li key={i}>
+                <span className="lux-job-title">{job.title}</span>
+              </li>
             ))}
           </ul>
         </div>
         <div className="lux-dash-card">
           <div className="lux-dash-title">Recommended Skills to Excel</div>
           <ul className="lux-skill-list">
-            {skillRecs.map((skill, i) => (<li key={i}>{skill}</li>))}
+            {skillRecs.map((skill, i) => (
+              <li key={i}>{skill}</li>
+            ))}
           </ul>
         </div>
       </div>
@@ -252,10 +273,19 @@ function About() {
   );
 }
 
-// Top-level App
+/**
+ * Top-level App with main state management for the profile.
+ * Now carries 'role' and 'domain' as well.
+ */
 // PUBLIC_INTERFACE
 function App() {
-  const [profileData, setProfileData] = useState({ name: '', skills: [], goal: '' });
+  const [profileData, setProfileData] = useState({
+    name: '',
+    skills: [],
+    goal: '',
+    role: '',
+    domain: '',
+  });
   const navigate = useNavigate();
   function gotoDashboard() {
     navigate('/dashboard');
