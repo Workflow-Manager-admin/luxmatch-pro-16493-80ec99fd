@@ -223,6 +223,9 @@ function Dashboard({ profileData }) {
   const matchedJobs = getMockJobs(profileData.skills, profileData.goal);
   const skillRecs = getMockSkills(profileData.skills, matchedJobs);
 
+  // Tooltip state - ensure only one tooltip shows at once (per-button, but here all use the same message)
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+
   return (
     <section className="lux-maincard">
       <h2 className="lux-section-title">
@@ -237,8 +240,23 @@ function Dashboard({ profileData }) {
           <div className="lux-dash-title">Top Matched Jobs</div>
           <ul className="lux-job-list">
             {matchedJobs.map((job, i) => (
-              <li key={i}>
+              <li key={i} style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:'10px'}}>
                 <span className="lux-job-title">{job.title}</span>
+                <span style={{ position: 'relative', display: 'inline-block' }}>
+                  <button
+                    className="lux-btn lux-btn-small"
+                    style={{padding:'7px 17px', fontSize:'0.99em', marginLeft:'14px'}}
+                    onMouseEnter={() => setHoveredIndex(i)}
+                    onMouseLeave={() => setHoveredIndex(null)}
+                  >
+                    Submit
+                  </button>
+                  {hoveredIndex === i && (
+                    <span className="lux-tooltip-disclaimer">
+                      Are you sure to apply for all the jobs?
+                    </span>
+                  )}
+                </span>
               </li>
             ))}
           </ul>
