@@ -21,3 +21,19 @@ webpack compiled successfully
 Compiling...
 Compiled successfully!
 webpack compiled successfully
+Compiling...
+Failed to compile.
+
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/luxmatch-pro-16493-80ec99fd/luxmatch_pro/src'
+ERROR in ./src/App.js 7:0-96
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/luxmatch-pro-16493-80ec99fd/luxmatch_pro/src'
+
+webpack compiled with 1 error
+Compiling...
+Failed to compile.
+
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/luxmatch-pro-16493-80ec99fd/luxmatch_pro/src'
+ERROR in ./src/App.js 7:0-96
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/luxmatch-pro-16493-80ec99fd/luxmatch_pro/src'
+
+webpack compiled with 1 error
