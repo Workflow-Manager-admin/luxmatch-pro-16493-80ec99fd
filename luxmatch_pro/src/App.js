@@ -198,6 +198,9 @@ function ProfileAnalysis({ profileData, setProfileData, onSubmit }) {
 
 // PUBLIC_INTERFACE
 function Dashboard({ profileData }) {
+  // Tooltip state - ensure only one tooltip shows at once (per-button, but here all use the same message)
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+
   if (
     !profileData.name ||
     !profileData.skills?.length ||
@@ -222,9 +225,6 @@ function Dashboard({ profileData }) {
   // Calculate results
   const matchedJobs = getMockJobs(profileData.skills, profileData.goal);
   const skillRecs = getMockSkills(profileData.skills, matchedJobs);
-
-  // Tooltip state - ensure only one tooltip shows at once (per-button, but here all use the same message)
-  const [hoveredIndex, setHoveredIndex] = useState(null);
 
   return (
     <section className="lux-maincard">
