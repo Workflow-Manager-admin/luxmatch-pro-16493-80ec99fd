@@ -18,3 +18,19 @@ Note that the development build is not optimized.
 To create a production build, use npm run build.
 
 webpack compiled successfully
+Compiling...
+Failed to compile.
+
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/luxmatch-pro-16493-80ec99fd/luxmatch_pro/src'
+ERROR in ./src/App.js 8:0-93
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/luxmatch-pro-16493-80ec99fd/luxmatch_pro/src'
+
+webpack compiled with 1 error
+Compiling...
+Failed to compile.
+
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/luxmatch-pro-16493-80ec99fd/luxmatch_pro/src'
+ERROR in ./src/App.js 8:0-93
+Module not found: Error: Can't resolve 'react-router-dom' in '/home/kavia/workspace/code-generation/luxmatch-pro-16493-80ec99fd/luxmatch_pro/src'
+
+webpack compiled with 1 error
