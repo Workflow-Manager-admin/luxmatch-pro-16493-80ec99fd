@@ -173,6 +173,37 @@ body, .lux-app-bg {
   font-size: 1.21rem;
 }
 
+/* Small button for job actions (interface-sized) */
+.lux-btn-small {
+  padding: 7px 17px;
+  font-size: 0.99em;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 0;
+}
+
+/* Tooltip/disclaimer for submit button in job list */
+.lux-tooltip-disclaimer {
+  visibility: visible;
+  opacity: 1;
+  background: #232252;
+  color: #fff;
+  text-align: center;
+  font-size: 0.96em;
+  border-radius: 7px;
+  padding: 7px 14px;
+  position: absolute;
+  z-index: 10;
+  top: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  white-space: nowrap;
+  box-shadow: 0 2px 14px 0 rgba(20, 16, 60, 0.10);
+  transition: opacity 0.14s;
+  pointer-events: none;
+}
+
 /* Form Styles */
 .lux-form {
   display: flex;
