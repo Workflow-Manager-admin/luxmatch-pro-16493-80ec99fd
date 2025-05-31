@@ -87,9 +87,23 @@ function getMockSkills(skills = [], jobs = []) {
   return topSkills;
 }
 
-// PUBLIC_INTERFACE
+/**
+ * Profile Analysis form component for user input of core profile details.
+ * Now includes fields for Role and Domain.
+ *
+ * @param {object} profileData - persisted profile state
+ * @param {function} setProfileData - setter for profile state
+ * @param {function} onSubmit - callback to move to analysis/dashboard
+ */
 function ProfileAnalysis({ profileData, setProfileData, onSubmit }) {
-  const [form, setForm] = useState({ name: profileData.name || '', skills: profileData.skills || '', goal: profileData.goal || '' });
+  // include domain and role in form state
+  const [form, setForm] = useState({
+    name: profileData.name || '',
+    skills: Array.isArray(profileData.skills) ? profileData.skills.join(', ') : (profileData.skills || ''),
+    goal: profileData.goal || '',
+    role: profileData.role || '',
+    domain: profileData.domain || '',
+  });
   const [err, setErr] = useState('');
 
   // PUBLIC_INTERFACE
@@ -100,7 +114,7 @@ function ProfileAnalysis({ profileData, setProfileData, onSubmit }) {
   // PUBLIC_INTERFACE
   function handleSubmit(e) {
     e.preventDefault();
-    if (!form.name.trim() || !form.skills.trim() || !form.goal.trim()) {
+    if (!form.name.trim() || !form.skills.trim() || !form.goal.trim() || !form.role.trim() || !form.domain.trim()) {
       setErr('Please complete all fields.');
       return;
     }
@@ -109,6 +123,8 @@ function ProfileAnalysis({ profileData, setProfileData, onSubmit }) {
       ...form,
       skills: form.skills.split(',').map(s => s.trim()).filter(Boolean),
       goal: form.goal,
+      role: form.role,
+      domain: form.domain,
     });
     onSubmit();
   }
@@ -148,6 +164,28 @@ function ProfileAnalysis({ profileData, setProfileData, onSubmit }) {
             name="goal"
             placeholder="e.g. Full Stack Developer"
             value={form.goal}
+            onChange={handleChange}
+          />
+        </label>
+        <label className="lux-label">
+          Desired Role
+          <input
+            className="lux-input"
+            type="text"
+            name="role"
+            placeholder="e.g. Manager, Lead Engineer"
+            value={form.role}
+            onChange={handleChange}
+          />
+        </label>
+        <label className="lux-label">
+          Desired Domain
+          <input
+            className="lux-input"
+            type="text"
+            name="domain"
+            placeholder="e.g. Luxury Retail, Fintech"
+            value={form.domain}
             onChange={handleChange}
           />
         </label>
